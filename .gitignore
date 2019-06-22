@@ -1,0 +1,4 @@
+*.pyc
+.ropeproject
+__pycache__
+tags
