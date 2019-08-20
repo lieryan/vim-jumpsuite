@@ -154,7 +154,11 @@ def main(report_file):
     stddir = mkdtemp(prefix='testreader')
 
     with open(report_file) as report:
-        report = ET.parse(report)
+        try:
+            report = ET.parse(report)
+        except ET.ParseError:
+            print('Cannot parse file {}'.format(report_file), file=sys.stderr)
+            return -1
         root = report.getroot()
         if root.tag == 'testsuite':
             suites = [root]
