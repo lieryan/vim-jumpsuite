@@ -255,6 +255,7 @@ def extract_closest_tbline(lines):
 def format_tbline(tbline, error_line, level=0):
     indent = {0: '', 1: '`- '}[level]
     template = "{0.fname}:{0.lineno}:{indent} {0.name} : {error_line} : {0.code_line}"
+    error_line = re.sub('(\d+)(?=:)', r'\1\\', error_line)
     return template.format(tbline, indent=indent, error_line=error_line)
 
 
