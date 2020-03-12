@@ -61,11 +61,6 @@ def parse_case(case):
     return shortname, fullname, error, detail.text
 
 
-def get_project():
-    from rope.base.project import Project
-    return Project('.')
-
-
 def get_test_name(case):
     test_name = case.attrib['name']
     subtest_match = SUBTEST_PAT.match(test_name)
