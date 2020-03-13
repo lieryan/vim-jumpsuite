@@ -75,6 +75,13 @@ def main(report_file):
         shortname, fullname, error, detail = parse_case(case)
 
         interesting_tblines = OrderedDict()
+
+        if case.find('error') is not None and case.find('error').attrib['type'] == 'UnexpectedSuccess':
+            # there is no traceback for UnexpectedSuccess
+            unexpected_success = TBLine(fname=case.attrib['file'], lineno=case.attrib['line'], name=case.attrib['name'], file_line=None, code_line='')
+            print(format_tbline(unexpected_success, 'Unexpected success'))
+            return
+
         try:
             lines, error_line, parsed_tb = find_last_traceback(detail, case)
         except StopIteration: # FIXME: use proper exception
@@ -144,7 +151,10 @@ def main(report_file):
             filename = os.path.join(stddir, str(case_id) + '.{kind}'.format(kind=kind))
             with open(filename, 'w') as f:
                 f.write(node.text)
-            return filename
+            with open(filename) as f:
+                if not f.read().strip():
+                    return None
+                return filename
 
     stddir = mkdtemp(prefix='testreader')
 
