@@ -213,14 +213,20 @@ def parse_traceback(lines):
     header_line = next(lines)
 
     traceback, lines = takeuntil(lambda line: line.startswith("  "), lines)
-    parsed_tb = []
 
     def parse_file_line(file_line):
-        return FILE_LINE_PATH.search(file_line).groups()
+        matches = FILE_LINE_PATH.search(file_line)
+        return matches and matches.groups()
 
-    for file_line, code_line in pair(traceback):
-        fname, lineno, name = parse_file_line(file_line)
-        parsed_tb.append(TBLine(fname, lineno, name, file_line, code_line.strip()))
+    parsed_tb = []
+    try:
+        while True:
+            file_line = next(traceback)
+            fname, lineno, name = parse_file_line(file_line)
+            code_line, traceback = takeuntil(lambda line: not parse_file_line(line), traceback)
+            parsed_tb.append(TBLine(fname, lineno, name, file_line, '\\n'.join(code_line).strip()))
+    except StopIteration:
+        pass
 
     error_line = next(lines).strip()
 
