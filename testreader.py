@@ -164,7 +164,7 @@ def main(report_file):
         try:
             report = ET.parse(report)
         except ET.ParseError:
-            print('Cannot parse file {}'.format(report_file), file=sys.stderr)
+            print('{}: Cannot parse file {}'.format(sys.argv[0], report_file), file=sys.stderr)
             return -1
         root = report.getroot()
         if root.tag == 'testsuite':
