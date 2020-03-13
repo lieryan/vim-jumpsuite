@@ -184,11 +184,6 @@ def main(report_file):
             return -1
 
 
-def pair(traceback):
-    for line in traceback:
-        yield line, next(traceback)
-
-
 def takeuntil(condition, iterator, immediate_tail=False):
     buff = []
     iterator = iter(iterator)
