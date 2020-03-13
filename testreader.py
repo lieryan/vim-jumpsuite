@@ -79,7 +79,7 @@ def main(report_file):
         if case.find('error') is not None and case.find('error').attrib['type'] == 'UnexpectedSuccess':
             # there is no traceback for UnexpectedSuccess
             unexpected_success = TBLine(fname=case.attrib['file'], lineno=case.attrib['line'], name=case.attrib['name'], file_line=None, code_line='')
-            print(format_tbline(unexpected_success, 'Unexpected success'))
+            print(format_tbline(unexpected_success, case.find('error').attrib['message']))
             return
 
         try:
