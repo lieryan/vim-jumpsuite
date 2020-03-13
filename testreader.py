@@ -113,6 +113,7 @@ def main(report_file):
     def find_last_traceback(detail, case):
         lines = []
         trailer = detail.splitlines()
+        parsed_tb = None
         while not lines and trailer:
             try:
                 _, parsed_tb, error_line, trailer = parse_traceback(trailer)
@@ -120,6 +121,7 @@ def main(report_file):
                 if not lines and parsed_tb:
                     lines = list(parsed_tb)
                     break
+                print('\n'.join(trailer).strip())
                 raise
 
             test_name = get_test_name(case)
