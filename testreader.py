@@ -43,8 +43,8 @@ def parse_case(case):
         detail = case.find('failure')
 
     if case.attrib['classname']:
-        modulename, classname = case.attrib['classname'].rsplit('.', 1)
-        abbrev_modulename = '.'.join([p[0] for p in modulename.split('.')])
+        modulename, _, classname = case.attrib['classname'].rpartition('.')
+        abbrev_modulename = '.'.join([p[:1] for p in modulename.split('.')])
         abbrev_classname = abbrev_modulename + '.' + classname
         shortname = abbrev_classname + '.' + case.attrib['name']
         fullname = modulename + '.' + classname + '.' + case.attrib['name']
