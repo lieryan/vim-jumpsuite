@@ -17,6 +17,9 @@ FILE_LINE_PATH = re.compile(r'File "(.*)", line (\d+), in (.+)')
 TBLine = namedtuple('TBLine', ['fname', 'lineno', 'name', 'file_line', 'code_line'])
 
 
+PROG_NAME = 'testreader'
+
+
 # never jump to files in these paths
 DEFAULT_FRAMEWORK_PATHS = ['unittest/case.py', 'django/test/testcases.py', '.virtualenvs', '.pyenv', 'site-packages'] \
 
@@ -169,7 +172,7 @@ def main(report_file):
                     return None
                 return filename
 
-    stddir = mkdtemp(prefix='testreader')
+    stddir = mkdtemp(prefix=PROG_NAME)
 
     with open(report_file) as report:
         try:
