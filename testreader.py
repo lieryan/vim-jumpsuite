@@ -17,6 +17,17 @@ FILE_LINE_PATH = re.compile(r'File "(.*)", line (\d+), in (.+)')
 TBLine = namedtuple('TBLine', ['fname', 'lineno', 'name', 'file_line', 'code_line'])
 
 
+# never jump to files in these paths
+DEFAULT_FRAMEWORK_PATHS = ['unittest/case.py', 'django/test/testcases.py', '.virtualenvs', '.pyenv', 'site-packages'] \
+
+
+def load_exclude_file():
+    exclude_file = os.path.expanduser('~/.config/{}/exclude'.format(PROG_NAME))
+    if not os.path.exists(exclude_file):
+        return []
+    return [line.strip() for line in open(exclude_file) if line.strip()]
+
+
 def summarize_testsuites(suites):
     summary = {'errors': int, 'failures': int, 'skipped': int, 'skips': int, 'tests': int, 'time': float}
     attribs = [s.attrib for s in suites]
@@ -239,8 +250,10 @@ def parse_traceback(lines):
 
 
 def is_framework_code(tbline):
-    framework_paths = ['unittest/case.py', 'django/test/testcases.py', '.virtualenvs', '.pyenv', 'site-packages']
-    return any(path in tbline.fname for path in framework_paths) or (tbline.name in ['prevent', 'validate'] and tbline.fname.endswith('lib/functions.py'))
+    return any(path in tbline.fname for path in FRAMEWORK_PATHS) \
+        or (tbline.name in ['prevent', 'validate'] and tbline.fname.endswith('lib/functions.py')) \
+        or (tbline.name in ['assert_only_in_australia'])
+
 
 def is_framework_setup(tbline):
     return is_framework_code(tbline)
@@ -272,6 +285,8 @@ def format_tbline(tbline, error_line, level=0):
 
 
 if __name__ == '__main__':
+    FRAMEWORK_PATHS = DEFAULT_FRAMEWORK_PATHS + load_exclude_file()
+
     if len(sys.argv) >= 2:
         filename = sys.argv[1]
     else:
