@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite errors="0" failures="0" name="app.tests.test_api.APITests-20190318173844" skipped="0" tests="1" time="0.001" timestamp="2019-03-18T17:38:44">
+		<testcase classname="app.tests.test_api.APITests" name="test_api_can_foo" time="0.001" timestamp="2019-03-18T17:38:47">
+			<error message="cannot import name 'foobar_the_buzz'" type="ImportError">
+<![CDATA[Traceback (most recent call last):
+  File "/Users/lieryan/.pyenv/versions/3.6.6/lib/python3.6/unittest/case.py", line 59, in testPartExecutor
+    yield
+  File "/Users/lieryan/.pyenv/versions/3.6.6/lib/python3.6/unittest/case.py", line 605, in run
+    testMethod()
+  File "/home/user/Projects/myapp/app/tests/test_api.py", line 160, in test_api_can_foo
+    exec('from {} import {}'.format(blah, baz))
+  File "<string>", line 1, in <module>
+ImportError: cannot import name 'foobar_the_buzz'
+]]>			</error>
+		</testcase>
+		<system-out>
+<![CDATA[]]>		</system-out>
+		<system-err>
+<![CDATA[]]>		</system-err>
+	</testsuite>
+</testsuites>

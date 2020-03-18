@@ -1,0 +1,2 @@
+FAILED. Ran 6 tests in 0.001s (errors=6, failures=0, skipped=0)
+/home/user/Projects/myapp/comments/tests/test_api.py:20: setUp : ZeroDivisionError: division by zero : 1/0

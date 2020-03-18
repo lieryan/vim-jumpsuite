@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite errors="17" failures="0" name="comments.tests.test_api.APITests-20191125131334" skipped="0" tests="17" time="0.011" timestamp="2019-11-25T13:14:15">
+		<testcase classname="comments.tests.test_api.APITests" name="test_something_one" time="0.001" timestamp="2019-11-25T13:14:15">
+			<error message="FooBar matching query does not exist." type="DoesNotExist">
+<![CDATA[Traceback (most recent call last):
+  File "/Users/lieryan/.pyenv/versions/3.6.6/lib/python3.6/unittest/case.py", line 59, in testPartExecutor
+    yield
+  File "/Users/lieryan/.pyenv/versions/3.6.6/lib/python3.6/unittest/case.py", line 605, in run
+    testMethod()
+  File "/home/user/Projects/myapp/comments/tests/test_api.py", line 337, in test_something_one
+    self.assertEqual(new_card, self.foo.first().blah)
+  File "/home/user/Projects/myapp/comments/tests/test_api.py", line 455, in _something_here
+  File "/home/user/Projects/myapp/lib/test_helpers.py", line 789, in fake_something
+    blah = something or FooBar.objects.get(uid=settings.SOME_SETTING)
+  File "/Users/lieryan/.virtualenvs/myenv/lib/python3.6/site-packages/django/db/models/manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "/Users/lieryan/.virtualenvs/myenv/lib/python3.6/site-packages/somepackage/models/managers.py", line 206, in wrapper
+    queryset = func(*args, **kwargs)
+  File "/Users/lieryan/.virtualenvs/myenv/lib/python3.6/site-packages/django/db/models/query.py", line 408, in get
+    self.model._meta.object_name
+customers.models.FooBar.DoesNotExist: FooBar matching query does not exist.
+]]>			</error>
+		</testcase>
+	</testsuite>
+</testsuites>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite errors="0" failures="15" name="comments.tests.test_api.APITests-20190208123140" skipped="0" tests="18" time="2.180" timestamp="2019-02-08T12:31:42">
+		<testcase classname="comments.tests.test_api.APITests" name="test_form_0_do_something" time="0.103" timestamp="2019-02-08T12:31:40">
+			<failure message="302 != 200" type="AssertionError">
+<![CDATA[Traceback (most recent call last):
+  File "/Users/lieryan/.virtualenvs/myenv/lib/python3.6/site-packages/parameterized/parameterized.py", line 392, in standalone_func
+    return func(*(a + p.args), **p.kwargs)
+  File "/home/user/Projects/myapp/comments/tests/test_api.py", line 58, in test_form
+    self.assertEqual(302, response.status_code)
+AssertionError: 302 != 200
+]]>			</failure>
+		</testcase>
+		<system-out>
+<![CDATA[]]>		</system-out>
+		<system-err>
+<![CDATA[]]>		</system-err>
+	</testsuite>
+</testsuites>

@@ -1,0 +1,2 @@
+FAILED. Ran 1 tests in 0.000s (errors=1, failures=0, skipped=0)
+AttributeError: type object 'APITests' has no attribute 'test_api'

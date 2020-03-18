@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite errors="0" failures="0" name="comments.tests.test_api.APITests-20190315204626" skipped="0" tests="2" time="0.026" timestamp="2019-03-15T20:46:26">
+		<testcase classname="comments.tests.test_api.APITests" name="test_api_5xx_3_599" time="0.011" timestamp="2019-03-15T20:46:26">
+			<failure message="None is not an instance of &lt;class 'datetime.datetime'&gt;" type="AssertionError">
+<![CDATA[Traceback (most recent call last):
+  File "/Users/lieryan/.virtualenvs/myenv/lib/python3.6/site-packages/parameterized/parameterized.py", line 392, in standalone_func
+    return func(*(a + p.args), **p.kwargs)
+  File "/home/user/Projects/myapp/comments/tests/test_api.py", line 153, in test_api_5xx
+    self.assertIsInstance(e.exception.event_time, datetime)
+AssertionError: None is not an instance of <class 'datetime.datetime'>
+]]>			</failure>
+		</testcase>
+		<system-out>
+<![CDATA[]]>		</system-out>
+		<system-err>
+<![CDATA[]]>		</system-err>
+	</testsuite>
+</testsuites>

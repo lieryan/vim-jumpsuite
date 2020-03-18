@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite errors="1" failures="0" file="comments/tests/test_api.py" name="comments.tests.test_api.CardExchangeAPITests-20200313163005" skipped="29" tests="30" time="0.043" timestamp="2020-03-13T16:30:18">
+		<testcase classname="comments.tests.test_api.CardExchangeAPITests" file="comments/tests/test_api.py" line="305" name="test_one" time="0.001" timestamp="2020-03-13T16:30:18">
+			<error message="Unexpected success: This test was marked as expected failure but passed, please review it" type="UnexpectedSuccess"/>
+			<system-out>
+<![CDATA[]]>			</system-out>
+			<system-err>
+<![CDATA[]]>			</system-err>
+		</testcase>
+	</testsuite>
+</testsuites>

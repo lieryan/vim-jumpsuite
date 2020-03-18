@@ -1,0 +1,2 @@
+FAILED. Ran 9 tests in 0.117s (errors=9, failures=0, skipped=0)
+/home/user/Projects/myapp/comments/tests/test_api.py:33: setUp : TypeError: __init__() got an unexpected keyword argument 'logger' : self.api = API(logger=logger)

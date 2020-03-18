@@ -1,0 +1,2 @@
+Ran 2 tests in 0.026s (errors=0, failures=0, skipped=0)
+/home/user/Projects/myapp/comments/tests/test_api.py:153: test_api_5xx : AssertionError: None is not an instance of <class 'datetime.datetime'> : self.assertIsInstance(e.exception.event_time, datetime)

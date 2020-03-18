@@ -1,0 +1,2 @@
+FAILED. Ran 18 tests in 2.180s (errors=0, failures=15, skipped=0)
+/home/user/Projects/myapp/comments/tests/test_api.py:58: test_form : AssertionError: 302 != 200 : self.assertEqual(302, response.status_code)

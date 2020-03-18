@@ -1,0 +1,3 @@
+FAILED. Ran 17 tests in 0.011s (errors=17, failures=0, skipped=0)
+/home/user/Projects/myapp/comments/tests/test_api.py:337: test_something_one : customers.models.FooBar.DoesNotExist: FooBar matching query does not exist. : self.assertEqual(new_card, self.foo.first().blah)
+/home/user/Projects/myapp/lib/test_helpers.py:789:`-  fake_something :  : blah = something or FooBar.objects.get(uid=settings.SOME_SETTING)

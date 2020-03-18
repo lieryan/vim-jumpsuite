@@ -1,0 +1,2 @@
+FAILED. Ran 2 tests in 0.006s (errors=2, failures=0, skipped=0)
+/home/user/Projects/myapp/comments/tests/test_api.py:35: test_api_one : django.db.utils.IntegrityError: null value in column "foobared_at" violates not-null constraint : Something.objects.create(sent_at=datetime(year=2017, month=1, day=1, tzinfo=utc)).send()

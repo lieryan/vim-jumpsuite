@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite errors="1" failures="0" name="unittest.loader._FailedTest-20191021165823" skipped="0" tests="1" time="0.000" timestamp="2019-10-21T16:58:23">
+		<testcase classname="unittest.loader._FailedTest" name="test_api" time="0.000" timestamp="2019-10-21T16:58:23">
+			<error message="type object 'APITests' has no attribute 'test_api'" type="AttributeError">
+<![CDATA[AttributeError: type object 'APITests' has no attribute 'test_api'
+]]>			</error>
+		</testcase>
+		<system-out>
+<![CDATA[]]>		</system-out>
+		<system-err>
+<![CDATA[]]>		</system-err>
+	</testsuite>
+</testsuites>

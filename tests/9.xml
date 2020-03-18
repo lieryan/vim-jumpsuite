@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuite errors="0" failures="12" name="pytest" skipped="0" tests="12" time="0.033">
+  <testcase classname="tests.test_nodes.ConcatNodeTest" file="tests/test_nodes.py" line="68" name="test_node" time="0.000">
+    <failure message="TypeError: __init__() got an unexpected keyword argument 'buffer'">Traceback (most recent call last):
+  File "/home/user/Projects/tests/test_nodes.py", line 16, in setUp
+    self.node = self.given_node()
+  File "/home/user/Projects/tests/test_nodes.py", line 65, in given_node
+    child_left = Node.create_leaf(buffer=self.sample_buffer[left_slice])
+  File "/home/user/Projects/buffers.py", line 27, in create_leaf
+    **kwargs,
+TypeError: __init__() got an unexpected keyword argument 'buffer'</failure>
+  </testcase>
+</testsuite>

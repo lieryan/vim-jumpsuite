@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite errors="9" failures="0" name="comments.tests.test_api.APITests-20190123100623" skipped="0" tests="9" time="0.117" timestamp="2019-01-23T10:06:28">
+		<testcase classname="comments.tests.test_api.APITests" name="test_activate_card" time="0.017" timestamp="2019-01-23T10:06:28">
+			<error message="__init__() got an unexpected keyword argument 'logger'" type="TypeError">
+<![CDATA[Traceback (most recent call last):
+  File "/home/user/Projects/myapp/comments/tests/test_api.py", line 33, in setUp
+    self.api = API(logger=logger)
+TypeError: __init__() got an unexpected keyword argument 'logger'
+]]>			</error>
+		</testcase>
+	</testsuite>
+</testsuites>

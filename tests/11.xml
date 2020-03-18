@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite errors="0" failures="1" name="lib.tests.test_api.FunctionTests-20190820185342" skipped="0" tests="38" time="0.623" timestamp="2019-08-20T18:53:43">
+		<testcase classname="lib.tests.test_api.FunctionTests" name="test_1" time="0.000" timestamp="2019-08-20T18:53:43"/>
+		<testcase classname="lib.tests.test_api.FunctionTests" name="test_2" time="0.000" timestamp="2019-08-20T18:53:43"/>
+		<testcase classname="lib.tests.test_api.FunctionTests" name="test_3" time="0.000" timestamp="2019-08-20T18:53:43"/>
+		<testcase classname="lib.tests.test_api.FunctionTests" name="test_4" time="0.054" timestamp="2019-08-20T18:53:43"/>
+		<testcase classname="lib.tests.test_api.FunctionTests" name="test_5" time="0.012" timestamp="2019-08-20T18:53:43"/>
+		<testcase classname="lib.tests.test_api.FunctionTests" name="test_6" time="0.049" timestamp="2019-08-20T18:53:43"/>
+		<testcase classname="lib.tests.test_api.FunctionTests" name="test_7" time="0.048" timestamp="2019-08-20T18:53:43"/>
+		<testcase classname="lib.tests.test_api.FunctionTests" name="test_8" time="0.047" timestamp="2019-08-20T18:53:43"/>
+		<testcase classname="lib.tests.test_api.FunctionTests" name="test_9" time="0.000" timestamp="2019-08-20T18:53:43"/>
+		<testcase classname="lib.tests.test_api.FunctionTests" name="test_10" time="0.000" timestamp="2019-08-20T18:53:43"/>
+		<testcase classname="lib.tests.test_api.FunctionTests" name="test_11" time="0.037" timestamp="2019-08-20T18:53:43">
+			<failure message="'Illegal Blah transition [draft]-&gt;[invalid_status]' not found in '2019-08-20 18:53:43: Created [draft]'" type="AssertionError">
+<![CDATA[Traceback (most recent call last):
+  File "/home/user/Projects/myapp/lib/tests/test_api.py", line 249, in test_api
+    self.assertIn('Illegal Blah transition [draft]->[invalid_status]', model.history.splitlines()[-1])
+AssertionError: 'Illegal Blah transition [draft]->[invalid_status]' not found in '2019-08-20 18:53:43: Created [draft]'
+]]>			</failure>
+		</testcase>
+		<system-out>
+<![CDATA[]]>		</system-out>
+		<system-err>
+<![CDATA[]]>		</system-err>
+	</testsuite>
+	<testsuite errors="0" failures="1" name="lib.tests.test_api.SomethingElseTest-20190820185342" skipped="0" tests="1" time="0.171" timestamp="2019-08-20T18:53:43">
+		<testcase classname="lib.tests.test_api.SomethingElseTest" name="test_something_else" time="0.171" timestamp="2019-08-20T18:53:43">
+			<failure message="SomethingError not raised" type="AssertionError">
+<![CDATA[Traceback (most recent call last):
+  File "/home/user/Projects/myapp/lib/tests/test_api.py", line 478, in test_something_else
+    self.assertIsNone(fut1.result())
+  File "/Users/lieryan/.pyenv/versions/3.6.6/lib/python3.6/contextlib.py", line 88, in __exit__
+    next(self.gen)
+  File "/Users/lieryan/.virtualenvs/myenv/lib/python3.6/site-packages/django/test/testcases.py", line 675, in _assert_raises_or_warns_cm
+    yield cm
+AssertionError: SomethingError not raised
+]]>			</failure>
+		</testcase>
+		<system-out>
+<![CDATA[]]>		</system-out>
+		<system-err>
+<![CDATA[]]>		</system-err>
+	</testsuite>
+</testsuites>

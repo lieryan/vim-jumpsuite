@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite errors="1" failures="0" name="comments.tests.test_api.APITests-20190318172159" skipped="0" tests="1" time="0.168" timestamp="2019-03-18T17:22:00">
+		<testcase classname="comments.tests.test_api.APITests" name="test_api_by_foo" time="0.168" timestamp="2019-03-18T17:22:00">
+			<error message="division by zero" type="ZeroDivisionError">
+<![CDATA[Traceback (most recent call last):
+  File "/home/user/Projects/myapp/comments/tests/test_api.py", line 130, in test_api_by_foo
+    1/0
+ZeroDivisionError: division by zero
+]]>			</error>
+		</testcase>
+		<system-out>
+<![CDATA[]]>		</system-out>
+		<system-err>
+<![CDATA[]]>		</system-err>
+	</testsuite>
+</testsuites>
