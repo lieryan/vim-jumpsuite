@@ -6,6 +6,7 @@ import os
 import re
 import sys
 from collections import namedtuple, OrderedDict
+from fnmatch import fnmatch
 from itertools import dropwhile
 from tempfile import mkdtemp
 from xml.etree import ElementTree as ET
@@ -21,14 +22,39 @@ PROG_NAME = 'testreader'
 
 
 # never jump to files in these paths
-DEFAULT_FRAMEWORK_PATHS = ['unittest/case.py', 'django/test/testcases.py', '.virtualenvs', '.pyenv', 'site-packages'] \
+DEFAULT_FRAMEWORK_PATHS = [
+    'unittest/case.py',
+    'django/test/testcases.py',
+    '.virtualenvs/*',
+    '.pyenv/*',
+    'site-packages/*',
+]
 
 
 def load_exclude_file():
+    """
+    Exclude file example:
+
+        dont_care_about_this_file.py
+        or_this_file.py
+
+        lib/*.py
+            some_function_to_ignore
+            another_function
+
+        *
+            validate_*
+    """
     exclude_file = os.path.expanduser('~/.config/{}/exclude'.format(PROG_NAME))
-    if not os.path.exists(exclude_file):
-        return []
-    return [line.strip() for line in open(exclude_file) if line.strip()]
+    excludes = {}
+    last_file = []
+    if os.path.exists(exclude_file):
+        for line in open(exclude_file):
+            if line.startswith('\t') or line.startswith(' '):
+                last_file.append(line.strip())
+            elif line.strip():
+                last_file = excludes[line.strip()] = []
+    return excludes
 
 
 def summarize_testsuites(suites):
@@ -253,19 +279,13 @@ def parse_traceback(lines):
 
 
 def is_framework_code(tbline):
-    return any(path in tbline.fname for path in FRAMEWORK_PATHS) \
-        or (tbline.name in ['prevent', 'validate'] and tbline.fname.endswith('lib/functions.py')) \
-        or (tbline.name in ['assert_only_in_australia'])
-
-
-def is_framework_setup(tbline):
-    return is_framework_code(tbline)
+    return any(fnmatch(tbline.fname, path) and any(fnmatch(tbline.name, fn) for fn in func_names) for path, func_names in FRAMEWORK_PATHS.items())
 
 
 def extract_test_tbline(error_line, parsed_tb):
     #import pprint, difflib
     #assert lines == parsed_tb, '\n'.join(difflib.unified_diff(pprint.pformat(lines).split('\n'), pprint.pformat(parsed_tb).split('\n')))
-    lines = list(dropwhile(is_framework_setup, parsed_tb))
+    lines = list(dropwhile(is_framework_code, parsed_tb))
     if lines:
         test_tbline = (lines[0], error_line)
     else:
@@ -288,7 +308,9 @@ def format_tbline(tbline, error_line, level=0):
 
 
 if __name__ == '__main__':
-    FRAMEWORK_PATHS = DEFAULT_FRAMEWORK_PATHS + load_exclude_file()
+    FRAMEWORK_PATHS = {path: [] for path in DEFAULT_FRAMEWORK_PATHS}
+    FRAMEWORK_PATHS.update(load_exclude_file())
+    FRAMEWORK_PATHS = {(p if p.startswith('/') else ('*/' + p)): (f or ['*']) for p, f in FRAMEWORK_PATHS.items()}
 
     if len(sys.argv) >= 2:
         filename = sys.argv[1]
