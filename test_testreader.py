@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from unittest import TestCase, main
+from unittest import TestCase
 from subprocess import run, PIPE
 
 import glob
@@ -38,4 +38,12 @@ class TestReaderTest(TestCase):
 
 
 if __name__ == '__main__':
-    main()
+    import unittest
+    try:
+        import xmlrunner
+        out = open('test-report.xml', 'wb')
+        testRunner = xmlrunner.XMLTestRunner(output=out)
+    except ImportError:
+        testRunner = None
+
+    unittest.main(testRunner=testRunner)

@@ -315,7 +315,7 @@ if __name__ == '__main__':
     if len(sys.argv) >= 2:
         filename = sys.argv[1]
     else:
-        filename = "test-reports/test-report.xml"
+        filename = "test-report.xml"
     status = main(filename)
     if status != 0:
         exit(status)
