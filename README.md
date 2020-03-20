@@ -7,6 +7,7 @@ prints out a quickfix list compatible output that allows you to use the
 quickfix list to jump to up to 3 "most interesting location" points for each
 failing test.
 
+
 # Installation
 
 ## As vim plugin
@@ -19,10 +20,16 @@ You have available a command:
 
 If XML filename is not provided, it'll use `g:jumpsuite_filename`.
 
+You can map that command to your preferred key mapping.
+
+This plugin will also set makeprg, so if you have vim-dispatch, you can just
+run `m<Enter>`.
+
 
 ## Manual integration
 
-Set `'makeprg'` so you can run with `:make` or if you have vim-dispatch with `m<Enter>`
+Set `'makeprg'` so you can run with `:make`/`:lmake`, or if you have
+vim-dispatch, with `m<Enter>`
 
     set makeprg=python\ /path/to/jumpsuite.py\ /path/to/test-report.xml
 
@@ -97,7 +104,9 @@ Add to your settings.py:
 
 # TODO
 
-1. Make a proper, installable vim plugin
+1. makeprg does not honor 'g:jumpsuite_filename'
 2. More languages?
 3. More tests. There is some tests, but it's a shame that a plugin to make
    unittest easier doesn't have extensive test coverage.
+4. Write vim docs
+5. Add ways to disable setting global settings like makeprg.
