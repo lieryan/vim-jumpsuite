@@ -7,7 +7,20 @@ prints out a quickfix list compatible output that allows you to use the
 quickfix list to jump to up to 3 "most interesting location" points for each
 failing test.
 
-Vim configuration:
+# Installation
+
+## As vim plugin
+
+Install this repository with your favorite plugin manager.
+
+You have available a command:
+
+    :JumpSuite path/to/junit-xml-report.xml
+
+If XML filename is not provided, it'll use `g:jumpsuite_filename`.
+
+
+## Manual integration
 
 Set `'makeprg'` so you can run with `:make` or if you have vim-dispatch with `m<Enter>`
 
@@ -20,6 +33,7 @@ Or configure a mapping like so:
 You can also use locationlist:
 
     nnoremap <Leader>js :lexpr system('python jumpsuite.py')\|copen<Enter>
+
 
 # Configuring your project
 
