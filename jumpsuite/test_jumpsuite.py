@@ -6,11 +6,11 @@ from subprocess import run, PIPE
 import glob
 import pathlib
 
-TESTREADER_PATH = pathlib.Path(__file__).absolute().with_name('testreader.py')
+TESTREADER_PATH = pathlib.Path(__file__).absolute().with_name('jumpsuite.py')
 TEST_DATA_PATH = (pathlib.Path(__file__).parent / 'tests').absolute()
 
 
-class TestReaderTest(TestCase):
+class JumpSuiteTest(TestCase):
     maxDiff = None
     def test_compare_output(self):
         files = list(TEST_DATA_PATH.glob('*.xml'))

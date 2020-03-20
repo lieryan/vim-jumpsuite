@@ -85,3 +85,5 @@ Add to your settings.py:
 
 1. Make a proper, installable vim plugin
 2. More languages?
+3. More tests. There is some tests, but it's a shame that a plugin to make
+   unittest easier doesn't have extensive test coverage.

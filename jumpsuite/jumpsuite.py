@@ -18,7 +18,7 @@ FILE_LINE_PATH = re.compile(r'File "(.*)", line (\d+), in (.+)')
 TBLine = namedtuple('TBLine', ['fname', 'lineno', 'name', 'file_line', 'code_line'])
 
 
-PROG_NAME = 'testreader'
+PROG_NAME = 'jumpsuite'
 
 
 # never jump to files in these paths
