@@ -1,4 +1,5 @@
 let s:plugindir = expand('<sfile>:p:h:h')
+let s:jumpsuite_py = shellescape(s:plugindir . '/jumpsuite/jumpsuite.py')
 
 let g:jumpsuite_filename = ''
 
@@ -7,8 +8,9 @@ function! s:jumpsuite(...)
     if filename
         let filename=shellescape(filename)
     endif
-    cexpr system('python '. shellescape(s:plugindir . '/jumpsuite/jumpsuite.py') . ' ' . filename)
+    cexpr system('python '. s:jumpsuite_py . ' ' . filename)
     copen
 endfunction
 
 command! -complete=file -nargs=? JumpSuite call s:jumpsuite(<f-args>)
+let &makeprg='python ' . s:jumpsuite_py . ' test-reports/test-report.xml'
