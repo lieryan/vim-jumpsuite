@@ -200,6 +200,10 @@ def main(report_file):
 
     stddir = mkdtemp(prefix=PROG_NAME)
 
+    if not os.path.exists(report_file):
+        print("Can't open {}, file not found.".format(report_file))
+        return -1
+
     with open(report_file) as report:
         try:
             report = ET.parse(report)
