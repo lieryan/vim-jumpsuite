@@ -110,3 +110,4 @@ Add to your settings.py:
    unittest easier doesn't have extensive test coverage.
 4. Write vim docs
 5. Add ways to disable setting global settings like makeprg.
+6. We should have an option to auto-open jumpsuite when vim-test finished
