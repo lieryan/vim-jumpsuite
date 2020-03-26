@@ -134,6 +134,10 @@ def main(report_file):
                 # reserve the spot for test_tbline
                 interesting_tblines[test_tbline[0]] = test_tbline
 
+            topmost_tbline = extract_topmost_tbline(lines)
+            if topmost_tbline:
+                interesting_tblines[topmost_tbline[0]] = topmost_tbline
+
             closest_tbline = extract_closest_tbline(lines)
             if closest_tbline:
                 interesting_tblines[closest_tbline[0]] = closest_tbline
@@ -301,6 +305,16 @@ def extract_closest_tbline(lines):
     for line in reversed(lines or []):
         if not is_framework_code(line) and not line.fname == "<string>":
             return (line, "", 1)
+
+
+def extract_topmost_tbline(original_lines):
+    lines = reversed(original_lines or [])
+    lines = dropwhile(is_framework_code, lines)
+    last_group, _ = takeuntil((lambda line: not is_framework_code(line)), lines)
+    last_group = list(last_group)
+    if last_group:
+        line = last_group[-1]
+        return (line, "", 1)
 
 
 def format_tbline(tbline, error_line, level=0):
