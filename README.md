@@ -187,9 +187,10 @@ Add to your settings.py:
         set errorformat+=%f:%l:%m
 
 
-# TODO
+# TODO and BUGS
 
-1. makeprg does not honor 'g:jumpsuite_filename'
+1. 'g:jumpsuite_filename' cannot be changed interactively, currently it must be
+   set from .vimrc before the plugin is loaded
 2. More languages?
 3. More tests. There is some tests, but it's a shame that a plugin to make
    unittest easier doesn't have extensive test coverage.
