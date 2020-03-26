@@ -298,10 +298,9 @@ def extract_test_tbline(error_line, parsed_tb):
 
 
 def extract_closest_tbline(lines):
-    if lines:
-        for line in reversed(lines):
-            if not is_framework_code(line) and not line.fname == "<string>":
-                return (line, "", 1)
+    for line in reversed(lines or []):
+        if not is_framework_code(line) and not line.fname == "<string>":
+            return (line, "", 1)
 
 
 def format_tbline(tbline, error_line, level=0):
