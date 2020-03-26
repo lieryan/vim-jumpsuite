@@ -1,11 +1,96 @@
 # vim-jumpsuite
 
-Jump to the errors from your test suite.
+Jump to "interesting" line of code from your test suite.
 
-This script parses python tracebacks in a JUnit-style XML unittest reports and
-prints out a quickfix list compatible output that allows you to use the
-quickfix list to jump to up to 3 "most interesting location" points for each
-failing test.
+jumpsuite parses tracebacks from a JUnit-style XML unittest reports generated
+by [unittest-xml-reporting](https://pypi.org/project/unittest-xml-reporting/)
+or [pytest](https://github.com/xmlrunner/unittest-xml-reporting), and picks a
+few of the "most interesting" line for each failing test to populate the
+quickfix list with locations that you will most likely need to go to while
+fixing the test.
+
+
+For example, jumpsuite will turn [this long and tedious traceback](jumpsuite/tests/10.xml):
+    
+    Traceback (most recent call last):
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/backends/utils.py", line 86, in _execute
+        return self.cursor.execute(sql, params)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/backends/sqlite3/base.py", line 396, in execute
+        return Database.Cursor.execute(self, query, params)
+    sqlite3.IntegrityError: CHECK constraint failed: comments_rating
+    
+    The above exception was the direct cause of the following exception:
+    
+    Traceback (most recent call last):
+      File "/home/user/Projects/myapp/myapp/comments/tests.py", line 8, in test_adding_comment
+        resp1 = self.client.post('/comment/', {'text': 'hello world'})
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/test/client.py", line 526, in post
+        response = super().post(path, data=data, content_type=content_type, secure=secure, **extra)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/test/client.py", line 356, in post
+        secure=secure, **extra)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/test/client.py", line 421, in generic
+        return self.request(**r)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/test/client.py", line 496, in request
+        raise exc_value
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+        response = get_response(request)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
+        response = self.process_exception_by_middleware(e, request)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
+        response = wrapped_callback(request, *callback_args, **callback_kwargs)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/views/generic/base.py", line 71, in view
+        return self.dispatch(request, *args, **kwargs)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/views/generic/base.py", line 97, in dispatch
+        return handler(request, *args, **kwargs)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/views/generic/edit.py", line 172, in post
+        return super().post(request, *args, **kwargs)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/views/generic/edit.py", line 142, in post
+        return self.form_valid(form)
+      File "/home/user/Projects/myapp/myapp/comments/views.py", line 14, in form_valid
+        obj.save_rating()
+      File "/home/user/Projects/myapp/myapp/comments/models.py", line 12, in save_rating
+        return Rating.objects.calculate_rating(self)
+      File "/home/user/Projects/myapp/myapp/comments/models.py", line 17, in calculate_rating
+        return Rating.objects.create(value=len(comment.text) - 100)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/models/manager.py", line 82, in manager_method
+        return getattr(self.get_queryset(), name)(*args, **kwargs)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/models/query.py", line 433, in create
+        obj.save(force_insert=True, using=self.db)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/models/base.py", line 746, in save
+        force_update=force_update, update_fields=update_fields)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/models/base.py", line 784, in save_base
+        force_update, using, update_fields,
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/models/base.py", line 887, in _save_table
+        results = self._do_insert(cls._base_manager, using, fields, returning_fields, raw)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/models/base.py", line 926, in _do_insert
+        using=using, raw=raw,
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/models/manager.py", line 82, in manager_method
+        return getattr(self.get_queryset(), name)(*args, **kwargs)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/models/query.py", line 1204, in _insert
+        return query.get_compiler(using=using).execute_sql(returning_fields)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/models/sql/compiler.py", line 1391, in execute_sql
+        cursor.execute(sql, params)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/backends/utils.py", line 68, in execute
+        return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/backends/utils.py", line 77, in _execute_with_wrappers
+        return executor(sql, params, many, context)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/backends/utils.py", line 86, in _execute
+        return self.cursor.execute(sql, params)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/utils.py", line 90, in __exit__
+        raise dj_exc_value.with_traceback(traceback) from exc_value
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/backends/utils.py", line 86, in _execute
+        return self.cursor.execute(sql, params)
+      File "/home/user/.virtualenvs/myenv/lib/python3.7/site-packages/django/db/backends/sqlite3/base.py", line 396, in execute
+        return Database.Cursor.execute(self, query, params)
+    django.db.utils.IntegrityError: CHECK constraint failed: comments_rating
+
+
+into this quickfix jumplist:
+
+    FAILED. Ran 1 tests in 0.028s (errors=1, failures=0, skipped=0)
+    /home/user/Projects/myapp/myapp/comments/tests.py:8: test_adding_comment : django.db.utils.IntegrityError: CHECK constraint failed: comments_rating : resp1 = self.client.post('/comment/', {'text': 'hello world'})
+    /home/user/Projects/myapp/myapp/comments/views.py:14:`-  form_valid :  : obj.save_rating()
+    /home/user/Projects/myapp/myapp/comments/models.py:17:`-  calculate_rating :  : return Rating.objects.create(value=len(comment.text) - 100)
 
 
 # Installation
