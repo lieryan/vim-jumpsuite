@@ -1,0 +1,4 @@
+FAILED. Ran 1 tests in 0.028s (errors=1, failures=0, skipped=0)
+/home/user/Projects/myapp/myapp/comments/tests.py:8: test_adding_comment : django.db.utils.IntegrityError: CHECK constraint failed: comments_rating : resp1 = self.client.post('/comment/', {'text': 'hello world'})
+/home/user/Projects/myapp/myapp/comments/views.py:14:`-  form_valid :  : obj.save_rating()
+/home/user/Projects/myapp/myapp/comments/models.py:17:`-  calculate_rating :  : return Rating.objects.create(value=len(comment.text) - 100)
