@@ -39,6 +39,7 @@ def load_exclude_file():
         or_this_file.py
 
         lib/*.py
+            # some comment
             some_function_to_ignore
             another_function
 
@@ -50,7 +51,9 @@ def load_exclude_file():
     last_file = []
     if os.path.exists(exclude_file):
         for line in open(exclude_file):
-            if line.startswith('\t') or line.startswith(' '):
+            if line.strip().startswith('#'):
+                pass # comment
+            elif line.startswith('\t') or line.startswith(' '):
                 last_file.append(line.strip())
             elif line.strip():
                 last_file = excludes[line.strip()] = []
