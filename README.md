@@ -172,6 +172,36 @@ Add to your settings.py:
     TEST_OUTPUT_FILE_NAME = 'test-report.xml'
 
 
+# Configuring what jumpsuite filters out
+
+There is a config file to fine tune the traceback lines that vim-jumpsuite 
+filters out from the summarized quickfix list. You can use shell/glob pattern
+to specify a pattern of file names or function names that jumpsuite should
+skip when finding files to jump to. The config file is in:
+
+    ~/.config/jumpsuite/exclude
+
+Example exclude file:
+
+    dont_care_about_this_file.py
+    or_this_file.py
+
+    lib/functions.py
+       validate
+       prevent
+
+    myapp/*.py
+        # some comment
+        some_function_to_ignore
+        another_function
+
+    *
+        validate_*
+
+By default, jumpsuite already ignores a number of files that you are unlikely
+to be interested to jump to such as third party libraries installed in
+site-package.
+
 # Troubleshooting
 
  1. I use pytest, why is traceback is not parsed correctly?
