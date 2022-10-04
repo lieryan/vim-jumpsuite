@@ -1,0 +1,3 @@
+FAILED. Ran 4 tests in 21.079s (errors=1, failures=0, skipped=0)
+/home/lieryan/Projects/cookiecutter-firmus/tests/test_template_api.py:107: docker_build : subprocess.CalledProcessError: Command '['docker', 'image', 'rm', 'cookiecutter-firmus-unittest:97f30a51dee8f710c16f972eb9f9c21b696f6e9b']' returned non-zero exit status 1. : proc.check_returncode()
+/usr/lib/python3.10/subprocess.py:456:`-  check_returncode :  : raise CalledProcessError(self.returncode, self.args, self.stdout,

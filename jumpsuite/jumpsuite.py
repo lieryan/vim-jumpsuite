@@ -119,7 +119,7 @@ def main(report_file):
 
         interesting_tblines = OrderedDict()
 
-        if case.find('error') is not None and case.find('error').attrib['type'] == 'UnexpectedSuccess':
+        if case.find('error') is not None and case.find('error').attrib.get('type') == 'UnexpectedSuccess':
             # there is no traceback for UnexpectedSuccess
             unexpected_success = TBLine(fname=case.attrib['file'], lineno=case.attrib['line'], name=case.attrib['name'], file_line=None, code_line='')
             print(format_tbline(unexpected_success, case.find('error').attrib['message']))
@@ -199,7 +199,7 @@ def main(report_file):
         if node is not None:
             filename = os.path.join(stddir, str(case_id) + '.{kind}'.format(kind=kind))
             with open(filename, 'w') as f:
-                f.write(node.text)
+                f.write(node.text or '')
             with open(filename) as f:
                 if not f.read().strip():
                     return None
