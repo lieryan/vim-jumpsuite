@@ -28,6 +28,7 @@ DEFAULT_FRAMEWORK_PATHS = [
     '.virtualenvs/*',
     '.pyenv/*',
     'site-packages/*',
+    '/usr/lib/*',
 ]
 
 
@@ -237,6 +238,7 @@ def main(report_file):
             return -1
 
 
+## this has incorrect sense, should be takewhile?
 def takeuntil(condition, iterator, immediate_tail=False):
     buff = []
     iterator = iter(iterator)
