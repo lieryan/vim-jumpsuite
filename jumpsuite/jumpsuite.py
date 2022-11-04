@@ -115,7 +115,7 @@ def get_test_name(case):
 
 TB_MARKER = "Traceback (most recent call last):"
 def main(report_file):
-    def format_case(case):
+    def format_case(case_id, case):
         shortname, fullname, error, detail = parse_case(case)
 
         interesting_tblines = OrderedDict()
@@ -159,8 +159,26 @@ def main(report_file):
         first_tbline = next(interesting_tblines_iter)
         override_name = case.attrib["name"] if is_pytest_parameterized_test(case, first_tbline) else first_tbline[0].name
         print(format_tbline(*first_tbline, override_name=override_name))
+        formatted_failure_message = format_failure_message(case, case_id)
+        if formatted_failure_message:
+            print(formatted_failure_message)
         for tbline in interesting_tblines_iter:
             print(format_tbline(*tbline))
+
+    def format_failure_message(case, case_id):
+        failure_message = extract_failure_message(case)
+        if failure_message is None:
+            return
+        if "\n" not in failure_message:
+            return
+        failure_message_file = create_casefile(case_id, kind="failure", text=failure_message)
+        if not failure_message_file:
+            return
+        return "{failure_message_file}:0:extended failure message".format(failure_message_file=failure_message_file)
+
+    def extract_failure_message(case):
+        if case.find("failure") is not None and case.find("failure").attrib.get("message"):
+            return case.find("failure").attrib.get("message")
 
     def is_pytest_parameterized_test(case, first_tbline):
         return case.attrib["name"].startswith(first_tbline[0].name + "[")
@@ -239,7 +257,7 @@ def main(report_file):
         for suite in suites:
             for case_id, case in enumerate(suite.findall('testcase')):
                 if case.find('error') is not None or case.find('failure') is not None:
-                    format_case(case)
+                    format_case(case_id, case)
 
                     format_casestd(case_id, case)
 
