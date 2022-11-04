@@ -205,15 +205,17 @@ def main(report_file):
     def extract_std(kind, case, case_id):
         node = case.find('system-{kind}'.format(kind=kind))
         if node is not None:
-            filename = os.path.join(stddir, str(case_id) + '.{kind}'.format(kind=kind))
-            with open(filename, 'w') as f:
-                f.write(node.text or '')
-            with open(filename) as f:
-                if not f.read().strip():
-                    return None
-                return filename
+            return create_casefile(case_id, kind=kind, text=node.text)
 
-    stddir = mkdtemp(prefix=PROG_NAME)
+    def create_casefile(case_id, kind, text):
+        if text.strip() == "":
+            return
+        filename = os.path.join(casefile_dir, str(case_id) + '.{kind}'.format(kind=kind))
+        with open(filename, 'w') as f:
+            f.write(text or '')
+        return filename
+
+    casefile_dir = mkdtemp(prefix=PROG_NAME)
 
     if not os.path.exists(report_file):
         print("Can't open {}, file not found.".format(report_file))
