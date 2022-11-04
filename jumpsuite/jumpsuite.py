@@ -155,8 +155,15 @@ def main(report_file):
                 # test_tbline takes priority
                 interesting_tblines[test_tbline[0]] = test_tbline
 
-        for tbline in interesting_tblines.values():
+        interesting_tblines_iter = iter(interesting_tblines.values())
+        first_tbline = next(interesting_tblines_iter)
+        override_name = case.attrib["name"] if is_pytest_parameterized_test(case, first_tbline) else first_tbline[0].name
+        print(format_tbline(*first_tbline, override_name=override_name))
+        for tbline in interesting_tblines_iter:
             print(format_tbline(*tbline))
+
+    def is_pytest_parameterized_test(case, first_tbline):
+        return case.attrib["name"].startswith(first_tbline[0].name + "[")
 
     def find_last_traceback(detail, case):
         lines = []
@@ -322,11 +329,16 @@ def extract_topmost_tbline(original_lines):
         return (line, "", 1)
 
 
-def format_tbline(tbline, error_line, level=0):
+def format_tbline(tbline, error_line, level=0, *, override_name=None):
     indent = {0: '', 1: '`- '}[level]
-    template = "{0.fname}:{0.lineno}:{indent} {0.name} : {error_line} : {0.code_line}"
+    template = "{0.fname}:{0.lineno}:{indent} {name} : {error_line} : {0.code_line}"
     error_line = re.sub('(\d+)(?=:)', r'\1\\', error_line)
-    return template.format(tbline, indent=indent, error_line=error_line)
+    return template.format(
+        tbline,
+        name=override_name if override_name is not None else tbline.name,
+        indent=indent,
+        error_line=error_line,
+    )
 
 
 if __name__ == '__main__':

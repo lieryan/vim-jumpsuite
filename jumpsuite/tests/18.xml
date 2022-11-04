@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+ <testsuite name="pytest" errors="0" failures="2" skipped="0" tests="94" time="53.094" timestamp="2022-11-04T15:18:42.836306" hostname="ryan-delta">
+  <testcase classname="tests.test_common" name="test_one[param0]" time="0.231">
+   <failure message="AssertionError: Trim Trailing Whitespace.................................................Passed&#10;  Fix End of Files.........................................................Passed&#10;  Check for added large files..............................................Passed&#10;  Sort imports (Python)....................................................Passed&#10;  &#10;assert 4 == 8&#10; +  where 4 = len(['Trim Trailing Whitespace.................................................Passed', 'Fix End of Files................................................Passed', 'Sort imports (Python)....................................................Passed'])&#10; +    where ['Trim Trailing Whitespace.................................................Passed', 'Fix End of Files................................................Passed', 'Sort imports (Python)....................................................Passed'] = &lt;built-in method splitlines of str object at 0x7f72449bea30&gt;()&#10; +      where &lt;built-in method splitlines of str object at 0x7f72449bea30&gt; = 'Trim Trailing Whitespace.................................................Passed\nFix End of Files....................................................Passed\nSort imports (Python)....................................................Passed\n'.splitlines">Traceback (most recent call last):
+  File "/home/user/Projects/myapp/test_common.py", line 174, in test_one
+    assert len(output.splitlines()) == 8, output
+AssertionError: Trim Trailing Whitespace.................................................Passed
+  Fix End of Files.........................................................Passed
+  Check for added large files..............................................Passed
+  Sort imports (Python)....................................................Passed
+  
+assert 4 == 8
+ +  where 4 = len(['Trim Trailing Whitespace.................................................Passed', 'Fix End of Files................................................Passed', 'Sort imports (Python)....................................................Passed'])
+ +    where ['Trim Trailing Whitespace.................................................Passed', 'Fix End of Files................................................Passed', 'Sort imports (Python)....................................................Passed'] = &lt;built-in method splitlines of str object at 0x7f72449bea30&gt;()
+    +      where &lt;built-in method splitlines of str object at 0x7f72449bea30&gt; = 'Trim Trailing Whitespace.................................................Passed\nFix End of Files....................................................Passed\nSort imports (Python)....................................................Passed\n'.splitlines
+  </failure>
+ </testcase>
+ <testcase classname="tests.test_common" name="test_one[param1]" time="0.274">
+  <failure message="AssertionError: Trim Trailing Whitespace.................................................Passed&#10;  Fix End of Files.........................................................Passed&#10;  Check for added large files..............................................Passed&#10;  Sort imports (Python)....................................................Passed&#10;  &#10;assert 4 == 8&#10; +  where 4 = len(['Trim Trailing Whitespace.................................................Passed', 'Fix End of Files................................................Passed', 'Sort imports (Python)....................................................Passed'])&#10; +    where ['Trim Trailing Whitespace.................................................Passed', 'Fix End of Files................................................Passed', 'Sort imports (Python)....................................................Passed'] = &lt;built-in method splitlines of str object at 0x7f72449bf1b0&gt;()&#10; +      where &lt;built-in method splitlines of str object at 0x7f72449bf1b0&gt; = 'Trim Trailing Whitespace.................................................Passed\nFix End of Files....................................................Passed\nSort imports (Python)....................................................Passed\n'.splitlines">Traceback (most recent call last):
+  File "/home/user/Projects/myapp/test_common.py", line 174, in test_one
+    assert len(output.splitlines()) == 8, output
+AssertionError: Trim Trailing Whitespace.................................................Passed
+  Fix End of Files.........................................................Passed
+  Check for added large files..............................................Passed
+  Sort imports (Python)....................................................Passed
+  
+assert 4 == 8
+ +  where 4 = len(['Trim Trailing Whitespace.................................................Passed', 'Fix End of Files................................................Passed', 'Sort imports (Python)....................................................Passed'])
+ +    where ['Trim Trailing Whitespace.................................................Passed', 'Fix End of Files................................................Passed', 'Sort imports (Python)....................................................Passed'] = &lt;built-in method splitlines of str object at 0x7f72449bf1b0&gt;()
+   +      where &lt;built-in method splitlines of str object at 0x7f72449bf1b0&gt; = 'Trim Trailing Whitespace.................................................Passed\nFix End of Files....................................................Passed\nSort imports (Python)....................................................Passed\n'.splitlines
+ </failure>
+ </testcase>
+ </testsuite>
+</testsuites>

@@ -1,0 +1,3 @@
+FAILED. Ran 94 tests in 53.094s (errors=0, failures=2, skipped=0)
+/home/user/Projects/myapp/test_common.py:174: test_one[param0] : AssertionError: Trim Trailing Whitespace.................................................Passed : assert len(output.splitlines()) == 8, output
+/home/user/Projects/myapp/test_common.py:174: test_one[param1] : AssertionError: Trim Trailing Whitespace.................................................Passed : assert len(output.splitlines()) == 8, output
