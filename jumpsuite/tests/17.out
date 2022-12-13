@@ -1,2 +1,2 @@
 FAILED. Ran 4 tests in 21.079s (errors=1, failures=0, skipped=0)
-/home/lieryan/Projects/cookiecutter-firmus/tests/test_template_api.py:107: docker_build : subprocess.CalledProcessError: Command '['docker', 'image', 'rm', 'cookiecutter-firmus-unittest:97f30a51dee8f710c16f972eb9f9c21b696f6e9b']' returned non-zero exit status 1. : proc.check_returncode()
+/home/lieryan/Projects/cookiecutter-firmus/tests/test_template_api.py:107: docker_build [test_docker_start_app_application_is_listening_on_port_80[0-api-0]] : subprocess.CalledProcessError: Command '['docker', 'image', 'rm', 'cookiecutter-firmus-unittest:97f30a51dee8f710c16f972eb9f9c21b696f6e9b']' returned non-zero exit status 1. : proc.check_returncode()

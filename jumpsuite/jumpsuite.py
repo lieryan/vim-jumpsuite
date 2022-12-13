@@ -15,7 +15,17 @@ from xml.etree import ElementTree as ET
 SUBTEST_PAT = re.compile(r"^(.*) \[(.*)\]$")
 FILE_LINE_PATH = re.compile(r'File "(.*)", line (\d+), in (.+)')
 
-TBLine = namedtuple("TBLine", ["fname", "lineno", "colno", "name", "file_line", "code_line"])
+TBLine = namedtuple(
+    "TBLine",
+    [
+        "fname",
+        "lineno",
+        "colno",
+        "name",
+        "file_line",
+        "code_line",
+    ],
+)
 
 
 PROG_NAME = "jumpsuite"
@@ -181,17 +191,27 @@ def main(report_file, casefile_dir):
 
         interesting_tblines_iter = iter(interesting_tblines.values())
         first_tbline = next(interesting_tblines_iter)
-        override_name = (
-            case.attrib["name"]
-            if is_pytest_parameterized_test(case, first_tbline)
-            else first_tbline[0].name
-        )
+        override_name = get_override_name(case, first_tbline)
         print(format_tbline(*first_tbline, override_name=override_name))
         formatted_failure_message = format_failure_message(case, case_id)
         if formatted_failure_message:
             print(formatted_failure_message)
         for tbline in interesting_tblines_iter:
             print(format_tbline(*tbline))
+
+    def get_override_name(case, first_tbline):
+        if is_pytest_parameterized_test(case, first_tbline):
+            return case.attrib["name"]
+        if is_pytest_parameterized_fixture(case):
+            return f"{first_tbline[0].name} [{case.attrib['name']}]"
+        else:
+            return first_tbline[0].name
+
+    def is_pytest_parameterized_test(case, first_tbline):
+        return case.attrib["name"].startswith(first_tbline[0].name + "[")
+
+    def is_pytest_parameterized_fixture(case):
+        return "[" in case.attrib["name"]
 
     def format_failure_message(case, case_id):
         failure_message = extract_failure_message(case)
