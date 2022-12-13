@@ -1,2 +1,2 @@
 Ran 1 tests in 0.001s (errors=0, failures=0, skipped=0)
-/home/user/Projects/myapp/app/tests/test_api.py:160: test_api_can_foo : ImportError: cannot import name 'foobar_the_buzz' : exec('from {} import {}'.format(blah, baz))
+/home/user/Projects/myapp/app/tests/test_api.py:160: test_api_can_foo : ImportError: cannot import name 'foobar_the_buzz' : exec('from {{}} import {{}}'.format(blah, baz))

@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
-from unittest import TestCase
-from subprocess import run, PIPE
-
-import glob
 import pathlib
+from subprocess import run, PIPE
+from tempfile import mkdtemp
+from unittest import TestCase
+
 
 TESTREADER_PATH = pathlib.Path(__file__).absolute().with_name('jumpsuite.py')
 TEST_DATA_PATH = (pathlib.Path(__file__).parent / 'tests').absolute()
@@ -18,13 +18,24 @@ class JumpSuiteTest(TestCase):
 
         for input_file in files:
             with self.subTest(input_file):
-                out = run(['python', str(TESTREADER_PATH), str(input_file)], stdout=PIPE, stderr=PIPE)
+                EXTENDED_TEMPDIR = mkdtemp()
+                out = run(
+                    [
+                        'python3',
+                        str(TESTREADER_PATH),
+                        str(input_file),
+                        "--tmpdir", EXTENDED_TEMPDIR,
+                    ],
+                    stdout=PIPE,
+                    stderr=PIPE,
+                )
                 stdout = out.stdout.decode()
                 stderr = out.stderr.decode()
 
                 output_file = input_file.with_suffix('.out')
                 if output_file.exists():
                     expected_out = output_file.read_bytes().decode()
+                    expected_out = expected_out.format(EXTENDED_TEMPDIR=EXTENDED_TEMPDIR)
                     self.assertEqual(expected_out, stdout, msg=stderr)
                 else:
                     self.assertTrue(

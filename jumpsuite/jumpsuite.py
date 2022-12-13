@@ -114,7 +114,7 @@ def get_test_name(case):
 
 
 TB_MARKER = "Traceback (most recent call last):"
-def main(report_file):
+def main(report_file, casefile_dir):
     def format_case(case_id, case):
         shortname, fullname, error, detail = parse_case(case)
 
@@ -232,8 +232,6 @@ def main(report_file):
         with open(filename, 'w') as f:
             f.write(text or '')
         return filename
-
-    casefile_dir = mkdtemp(prefix=PROG_NAME)
 
     if not os.path.exists(report_file):
         print("Can't open {}, file not found.".format(report_file))
@@ -370,6 +368,13 @@ if __name__ == '__main__':
         filename = sys.argv[1]
     else:
         filename = "test-report.xml"
-    status = main(filename)
+
+    if len(sys.argv) >= 3:
+        assert sys.argv[2] == "--tmpdir"
+        casefile_dir = sys.argv[3]
+    else:
+        casefile_dir = mkdtemp(prefix=PROG_NAME)
+
+    status = main(filename, casefile_dir)
     if status != 0:
         exit(status)
