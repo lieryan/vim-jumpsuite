@@ -124,7 +124,7 @@ Or configure a mapping like so:
 
 You can also use locationlist:
 
-    nnoremap <Leader>js :lexpr system('python jumpsuite.py')\|copen<Enter>
+    nnoremap <Leader>js :lexpr system('python jumpsuite.py')\|lopen<Enter>
 
 
 # Configuring your project
