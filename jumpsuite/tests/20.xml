@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+  <testsuite name="pytest" errors="2" failures="0" skipped="0" tests="28" time="38.686" timestamp="2022-12-13T17:07:59.079924" hostname="ryan-delta">
+    <testcase classname="tests.test_python_images" name="test_mytest" time="4.257">
+      <error message="failed on something">
+Traceback (most recent call last):
+  File "/home/user/myscript.py", line 5, in _foobar
+    1 + foo(a,b,c=x['z']['x']['y']['z']['y'], d=e)
+                  ~~~~~~~~~~~^^^^^
+KeyError: 'y'</error>
+    </testcase>
+  </testsuite>
+</testsuites>

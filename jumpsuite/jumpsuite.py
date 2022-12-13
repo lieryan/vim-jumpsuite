@@ -298,12 +298,17 @@ def parse_traceback(lines):
         matches = FILE_LINE_PATH.search(file_line)
         return matches and matches.groups()
 
+    def remove_column_markers(code_line):
+        """ Remove PEP657 fine-grained error location markers """
+        return (l for l in code_line if not re.match(r'^ *~*\^+$', l))
+
     parsed_tb = []
     try:
         while True:
             file_line = next(traceback)
             fname, lineno, name = parse_file_line(file_line)
             code_line, traceback = takeuntil(lambda line: not parse_file_line(line), traceback)
+            code_line = remove_column_markers(code_line)
             parsed_tb.append(TBLine(fname, lineno, name, file_line, '\\n'.join(code_line).strip()))
     except StopIteration:
         pass

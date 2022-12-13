@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+  <testsuite name="pytest" errors="2" failures="0" skipped="0" tests="28" time="38.686" timestamp="2022-12-13T17:07:59.079924" hostname="ryan-delta">
+    <testcase classname="tests.test_python_images" name="test_mytest[3.9]" time="4.257">
+      <error message="failed on setup with &quot;subprocess.CalledProcessError: Command '['docker', 'build', '-f', PosixPath('/tmp/pytest-of-user/pytest-155/inherited0/Dockerfile'), '--tag', 'localhost:32000/test-firmus/python:3.9-inherited', '.']' returned non-zero exit status 1.&quot;">Traceback (most recent call last):
+  File "/home/user/Projects/myapp/tests/conftest.py", line 164, in inherited_image
+    return inherited_docker_build("--tag", inherited_repo_tag)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Projects/myapp/tests/conftest.py", line 156, in _inherited_docker_build
+    proc.check_returncode()
+  File "/usr/lib/python3.11/subprocess.py", line 501, in check_returncode
+    raise CalledProcessError(self.returncode, self.args, self.stdout,
+subprocess.CalledProcessError: Command '['docker', 'build', '-f', PosixPath('/tmp/pytest-of-user/pytest-155/inherited0/Dockerfile'), '--tag', 'localhost:32000/test-firmus/python:3.9-inherited', '.']' returned non-zero exit status 1.</error>
+    </testcase>
+    <testcase classname="tests.test_python_images" name="test_mytest[3.10]" time="4.729">
+      <error message="failed on setup with &quot;subprocess.CalledProcessError: Command '['docker', 'build', '-f', PosixPath('/tmp/pytest-of-user/pytest-155/inherited2/Dockerfile'), '--tag', 'localhost:32000/test-firmus/python:3.10-inherited', '.']' returned non-zero exit status 1.&quot;">Traceback (most recent call last):
+  File "/home/user/Projects/myapp/tests/conftest.py", line 164, in inherited_image
+    return inherited_docker_build("--tag", inherited_repo_tag)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/Projects/myapp/tests/conftest.py", line 156, in _inherited_docker_build
+    proc.check_returncode()
+  File "/usr/lib/python3.11/subprocess.py", line 501, in check_returncode
+    raise CalledProcessError(self.returncode, self.args, self.stdout,
+subprocess.CalledProcessError: Command '['docker', 'build', '-f', PosixPath('/tmp/pytest-of-user/pytest-155/inherited2/Dockerfile'), '--tag', 'localhost:32000/test-firmus/python:3.10-inherited', '.']' returned non-zero exit status 1.</error>
+    </testcase>
+  </testsuite>
+</testsuites>
