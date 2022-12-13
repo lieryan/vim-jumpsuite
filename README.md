@@ -215,6 +215,7 @@ site-package.
     on: 
 
         set errorformat+=%f:%l:%m
+        set errorformat+=%f:%l:%c:%m
 
 
 # TODO and BUGS

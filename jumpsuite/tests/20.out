@@ -1,2 +1,2 @@
 FAILED. Ran 28 tests in 38.686s (errors=2, failures=0, skipped=0)
-/home/user/myscript.py:5: _foobar : KeyError: 'y' : 1 + foo(a,b,c=x['z']['x']['y']['z']['y'], d=e)
+/home/user/myscript.py:5:30: _foobar : KeyError: 'y' : 1 + foo(a,b,c=x['z']['x']['y']['z']['y'], d=e)

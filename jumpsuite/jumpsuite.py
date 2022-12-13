@@ -15,7 +15,7 @@ from xml.etree import ElementTree as ET
 SUBTEST_PAT = re.compile(r"^(.*) \[(.*)\]$")
 FILE_LINE_PATH = re.compile(r'File "(.*)", line (\d+), in (.+)')
 
-TBLine = namedtuple("TBLine", ["fname", "lineno", "name", "file_line", "code_line"])
+TBLine = namedtuple("TBLine", ["fname", "lineno", "colno", "name", "file_line", "code_line"])
 
 
 PROG_NAME = "jumpsuite"
@@ -137,6 +137,7 @@ def main(report_file, casefile_dir):
             unexpected_success = TBLine(
                 fname=case.attrib["file"],
                 lineno=case.attrib["line"],
+                colno=None,
                 name=case.attrib["name"],
                 file_line=None,
                 code_line="",
@@ -341,7 +342,14 @@ def parse_traceback(lines):
 
     def remove_column_markers(code_line):
         """Remove PEP657 fine-grained error location markers"""
-        return (l for l in code_line if not re.match(r"^ *~*\^+$", l))
+        filtered_code_line = []
+        colno = None
+        for l in code_line:
+            if re.match(r"^ *~*\^+$", l):
+                colno = l.index("^") + 1  # Vim's column number starts with 1
+            else:
+                filtered_code_line.append(l)
+        return filtered_code_line, colno
 
     parsed_tb = []
     try:
@@ -352,11 +360,12 @@ def parse_traceback(lines):
                 lambda line: not parse_file_line(line),
                 traceback,
             )
-            code_line = remove_column_markers(code_line)
+            code_line, colno = remove_column_markers(code_line)
             parsed_tb.append(
                 TBLine(
                     fname,
                     lineno,
+                    colno,
                     name,
                     file_line,
                     "\\n".join(code_line).strip(),
@@ -408,13 +417,15 @@ def extract_topmost_tbline(original_lines):
         return (line, "", 1)
 
 
-def format_tbline(tbline, error_line, level=0, *, override_name=None):
+def format_tbline(tbline: TBLine, error_line: str, level=0, *, override_name=None):
     indent = {0: "", 1: "`- "}[level]
-    template = "{0.fname}:{0.lineno}:{indent} {name} : {error_line} : {0.code_line}"
+    colno = f":{tbline.colno}" if tbline.colno is not None else ""
+    template = "{0.fname}:{0.lineno}{colno}:{indent} {name} : {error_line} : {0.code_line}"
     error_line = re.sub("(\d+)(?=:)", r"\1\\", error_line)
     return template.format(
         tbline,
         name=override_name if override_name is not None else tbline.name,
+        colno=colno,
         indent=indent,
         error_line=error_line,
     )
