@@ -12,23 +12,23 @@ from tempfile import mkdtemp
 from xml.etree import ElementTree as ET
 
 
-SUBTEST_PAT = re.compile(r'^(.*) \[(.*)\]$')
+SUBTEST_PAT = re.compile(r"^(.*) \[(.*)\]$")
 FILE_LINE_PATH = re.compile(r'File "(.*)", line (\d+), in (.+)')
 
-TBLine = namedtuple('TBLine', ['fname', 'lineno', 'name', 'file_line', 'code_line'])
+TBLine = namedtuple("TBLine", ["fname", "lineno", "name", "file_line", "code_line"])
 
 
-PROG_NAME = 'jumpsuite'
+PROG_NAME = "jumpsuite"
 
 
 # never jump to files in these paths
 DEFAULT_FRAMEWORK_PATHS = [
-    'unittest/case.py',
-    'django/test/testcases.py',
-    '.virtualenvs/*',
-    '.pyenv/*',
-    'site-packages/*',
-    '/usr/lib/*',
+    "unittest/case.py",
+    "django/test/testcases.py",
+    ".virtualenvs/*",
+    ".pyenv/*",
+    "site-packages/*",
+    "/usr/lib/*",
 ]
 
 
@@ -47,14 +47,14 @@ def load_exclude_file():
         *
             validate_*
     """
-    exclude_file = os.path.expanduser('~/.config/{}/exclude'.format(PROG_NAME))
+    exclude_file = os.path.expanduser("~/.config/{}/exclude".format(PROG_NAME))
     excludes = {}
     last_file = []
     if os.path.exists(exclude_file):
         for line in open(exclude_file):
-            if line.strip().startswith('#'):
-                pass # comment
-            elif line.startswith('\t') or line.startswith(' '):
+            if line.strip().startswith("#"):
+                pass  # comment
+            elif line.startswith("\t") or line.startswith(" "):
                 last_file.append(line.strip())
             elif line.strip():
                 last_file = excludes[line.strip()] = []
@@ -62,41 +62,48 @@ def load_exclude_file():
 
 
 def summarize_testsuites(suites):
-    summary = {'errors': int, 'failures': int, 'skipped': int, 'skips': int, 'tests': int, 'time': float}
+    summary = {
+        "errors": int,
+        "failures": int,
+        "skipped": int,
+        "skips": int,
+        "tests": int,
+        "time": float,
+    }
     attribs = [s.attrib for s in suites]
     for key in summary:
         summary[key] = sum(summary[key](a[key]) for a in attribs if key in a)
-    assert not (summary['skipped'] and summary['skips'])
-    if summary['skips']:
-        summary['skipped'] = summary['skips']
+    assert not (summary["skipped"] and summary["skips"])
+    if summary["skips"]:
+        summary["skipped"] = summary["skips"]
     return summary
 
 
 def format_summary(summary):
     template = "Ran {tests} tests in {time:.3f}s (errors={errors}, failures={failures}, skipped={skipped})"
     msg = template.format(**summary)
-    if summary['errors'] > 0 or summary['failures'] > 0:
-        msg = 'FAILED. ' + msg
+    if summary["errors"] > 0 or summary["failures"] > 0:
+        msg = "FAILED. " + msg
     return msg
 
 
 def parse_case(case):
-    if case.find('error') is not None:
-        detail = case.find('error')
+    if case.find("error") is not None:
+        detail = case.find("error")
     else:
-        detail = case.find('failure')
+        detail = case.find("failure")
 
-    if case.attrib['classname']:
-        modulename, _, classname = case.attrib['classname'].rpartition('.')
-        abbrev_modulename = '.'.join([p[:1] for p in modulename.split('.')])
-        abbrev_classname = abbrev_modulename + '.' + classname
-        shortname = abbrev_classname + '.' + case.attrib['name']
-        fullname = modulename + '.' + classname + '.' + case.attrib['name']
+    if case.attrib["classname"]:
+        modulename, _, classname = case.attrib["classname"].rpartition(".")
+        abbrev_modulename = ".".join([p[:1] for p in modulename.split(".")])
+        abbrev_classname = abbrev_modulename + "." + classname
+        shortname = abbrev_classname + "." + case.attrib["name"]
+        fullname = modulename + "." + classname + "." + case.attrib["name"]
     else:
-        shortname = case.attrib['name']
-        fullname = case.attrib['name']
+        shortname = case.attrib["name"]
+        fullname = case.attrib["name"]
 
-    if 'type' in detail:
+    if "type" in detail:
         template = "{detail[type]}: {detail[message]}"
     else:
         template = "{detail[message]}"
@@ -106,7 +113,7 @@ def parse_case(case):
 
 
 def get_test_name(case):
-    test_name = case.attrib['name']
+    test_name = case.attrib["name"]
     subtest_match = SUBTEST_PAT.match(test_name)
     if subtest_match:
         return subtest_match.group(1)
@@ -114,24 +121,40 @@ def get_test_name(case):
 
 
 TB_MARKER = "Traceback (most recent call last):"
+
+
 def main(report_file, casefile_dir):
     def format_case(case_id, case):
         shortname, fullname, error, detail = parse_case(case)
 
         interesting_tblines = OrderedDict()
 
-        if case.find('error') is not None and case.find('error').attrib.get('type') == 'UnexpectedSuccess':
+        if (
+            case.find("error") is not None
+            and case.find("error").attrib.get("type") == "UnexpectedSuccess"
+        ):
             # there is no traceback for UnexpectedSuccess
-            unexpected_success = TBLine(fname=case.attrib['file'], lineno=case.attrib['line'], name=case.attrib['name'], file_line=None, code_line='')
-            print(format_tbline(unexpected_success, case.find('error').attrib['message']))
+            unexpected_success = TBLine(
+                fname=case.attrib["file"],
+                lineno=case.attrib["line"],
+                name=case.attrib["name"],
+                file_line=None,
+                code_line="",
+            )
+            print(
+                format_tbline(
+                    unexpected_success,
+                    case.find("error").attrib["message"],
+                )
+            )
             return
 
         try:
             lines, error_line, parsed_tb = find_last_traceback(detail, case)
-        except StopIteration: # FIXME: use proper exception
-            lines = [line[4:] for line in detail.splitlines() if line.startswith('E ')]
+        except StopIteration:  # FIXME: use proper exception
+            lines = [line[4:] for line in detail.splitlines() if line.startswith("E ")]
             if lines:
-                print('\n'.join(lines))
+                print("\n".join(lines))
         else:
             test_tbline = extract_test_tbline(error_line, parsed_tb)
             if test_tbline:
@@ -157,7 +180,11 @@ def main(report_file, casefile_dir):
 
         interesting_tblines_iter = iter(interesting_tblines.values())
         first_tbline = next(interesting_tblines_iter)
-        override_name = case.attrib["name"] if is_pytest_parameterized_test(case, first_tbline) else first_tbline[0].name
+        override_name = (
+            case.attrib["name"]
+            if is_pytest_parameterized_test(case, first_tbline)
+            else first_tbline[0].name
+        )
         print(format_tbline(*first_tbline, override_name=override_name))
         formatted_failure_message = format_failure_message(case, case_id)
         if formatted_failure_message:
@@ -171,10 +198,16 @@ def main(report_file, casefile_dir):
             return
         if "\n" not in failure_message:
             return
-        failure_message_file = create_casefile(case_id, kind="failure", text=failure_message)
+        failure_message_file = create_casefile(
+            case_id,
+            kind="failure",
+            text=failure_message,
+        )
         if not failure_message_file:
             return
-        return "{failure_message_file}:0:extended failure message".format(failure_message_file=failure_message_file)
+        return "{failure_message_file}:0:extended failure message".format(
+            failure_message_file=failure_message_file
+        )
 
     def extract_failure_message(case):
         if case.find("failure") is not None and case.find("failure").attrib.get("message"):
@@ -194,43 +227,48 @@ def main(report_file, casefile_dir):
                 if not lines and parsed_tb:
                     lines = list(parsed_tb)
                     break
-                print('\n'.join(trailer).strip())
+                print("\n".join(trailer).strip())
                 raise
 
             test_name = get_test_name(case)
 
-            lines = list(dropwhile(
-                lambda line: test_name != line.name,
-                parsed_tb,
-            ))
+            lines = list(
+                dropwhile(
+                    lambda line: test_name != line.name,
+                    parsed_tb,
+                )
+            )
         return lines, error_line, parsed_tb
 
-        #for line in trailer:
-        #    if line.strip():
-        #        print(line)
+        # for line in trailer:
+        #     if line.strip():
+        #         print(line)
 
         # TODO: set errorformat=%f:%l:%m,%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 
     def format_casestd(case_id, case):
-        stderrfile = extract_std('err', case, case_id)
+        stderrfile = extract_std("err", case, case_id)
         if stderrfile:
             print("{stderrfile}:0:stderr".format(stderrfile=stderrfile))
 
-        stdoutfile = extract_std('out', case, case_id)
+        stdoutfile = extract_std("out", case, case_id)
         if stdoutfile:
             print("{stdoutfile}:0:stdout".format(stdoutfile=stdoutfile))
 
     def extract_std(kind, case, case_id):
-        node = case.find('system-{kind}'.format(kind=kind))
+        node = case.find("system-{kind}".format(kind=kind))
         if node is not None:
             return create_casefile(case_id, kind=kind, text=node.text)
 
     def create_casefile(case_id, kind, text):
         if text.strip() == "":
             return
-        filename = os.path.join(casefile_dir, str(case_id) + '.{kind}'.format(kind=kind))
-        with open(filename, 'w') as f:
-            f.write(text or '')
+        filename = os.path.join(
+            casefile_dir,
+            str(case_id) + ".{kind}".format(kind=kind),
+        )
+        with open(filename, "w") as f:
+            f.write(text or "")
         return filename
 
     if not os.path.exists(report_file):
@@ -241,25 +279,28 @@ def main(report_file, casefile_dir):
         try:
             report = ET.parse(report)
         except ET.ParseError:
-            print('{}: Cannot parse file {}'.format(sys.argv[0], report_file), file=sys.stderr)
+            print(
+                "{}: Cannot parse file {}".format(sys.argv[0], report_file),
+                file=sys.stderr,
+            )
             return -1
         root = report.getroot()
-        if root.tag == 'testsuite':
+        if root.tag == "testsuite":
             suites = [root]
         else:
-            suites = root.findall('testsuite')
+            suites = root.findall("testsuite")
         summary = summarize_testsuites(suites)
         summary_msg = format_summary(summary)
         print(summary_msg)
 
         for suite in suites:
-            for case_id, case in enumerate(suite.findall('testcase')):
-                if case.find('error') is not None or case.find('failure') is not None:
+            for case_id, case in enumerate(suite.findall("testcase")):
+                if case.find("error") is not None or case.find("failure") is not None:
                     format_case(case_id, case)
 
                     format_casestd(case_id, case)
 
-        if 'FAILED' in summary_msg:
+        if "FAILED" in summary_msg:
             return -1
 
 
@@ -267,6 +308,7 @@ def main(report_file, casefile_dir):
 def takeuntil(condition, iterator, immediate_tail=False):
     buff = []
     iterator = iter(iterator)
+
     def _takeuntil():
         for item in iterator:
             if condition(item):
@@ -274,14 +316,13 @@ def takeuntil(condition, iterator, immediate_tail=False):
             else:
                 buff.append(item)
                 break
+
     def _tail():
         if not buff and not immediate_tail:
             for _ in taker:
                 pass
-        #yield from buff
-        for l in buff: yield l
-        #yield from iterator
-        for l in iterator: yield l
+        yield from buff
+        yield from iterator
 
     taker = _takeuntil()
     return taker, _tail()
@@ -299,17 +340,28 @@ def parse_traceback(lines):
         return matches and matches.groups()
 
     def remove_column_markers(code_line):
-        """ Remove PEP657 fine-grained error location markers """
-        return (l for l in code_line if not re.match(r'^ *~*\^+$', l))
+        """Remove PEP657 fine-grained error location markers"""
+        return (l for l in code_line if not re.match(r"^ *~*\^+$", l))
 
     parsed_tb = []
     try:
         while True:
             file_line = next(traceback)
             fname, lineno, name = parse_file_line(file_line)
-            code_line, traceback = takeuntil(lambda line: not parse_file_line(line), traceback)
+            code_line, traceback = takeuntil(
+                lambda line: not parse_file_line(line),
+                traceback,
+            )
             code_line = remove_column_markers(code_line)
-            parsed_tb.append(TBLine(fname, lineno, name, file_line, '\\n'.join(code_line).strip()))
+            parsed_tb.append(
+                TBLine(
+                    fname,
+                    lineno,
+                    name,
+                    file_line,
+                    "\\n".join(code_line).strip(),
+                )
+            )
     except StopIteration:
         pass
 
@@ -322,12 +374,16 @@ def parse_traceback(lines):
 
 
 def is_framework_code(tbline):
-    return any(fnmatch(tbline.fname, path) and any(fnmatch(tbline.name, fn) for fn in func_names) for path, func_names in FRAMEWORK_PATHS.items())
+    return any(
+        fnmatch(tbline.fname, path)
+        and any(fnmatch(tbline.name, fn) for fn in func_names)
+        for path, func_names in FRAMEWORK_PATHS.items()
+    )
 
 
 def extract_test_tbline(error_line, parsed_tb):
-    #import pprint, difflib
-    #assert lines == parsed_tb, '\n'.join(difflib.unified_diff(pprint.pformat(lines).split('\n'), pprint.pformat(parsed_tb).split('\n')))
+    # import pprint, difflib
+    # assert lines == parsed_tb, '\n'.join(difflib.unified_diff(pprint.pformat(lines).split('\n'), pprint.pformat(parsed_tb).split('\n')))
     lines = list(dropwhile(is_framework_code, parsed_tb))
     if lines:
         test_tbline = (lines[0], error_line)
@@ -353,9 +409,9 @@ def extract_topmost_tbline(original_lines):
 
 
 def format_tbline(tbline, error_line, level=0, *, override_name=None):
-    indent = {0: '', 1: '`- '}[level]
+    indent = {0: "", 1: "`- "}[level]
     template = "{0.fname}:{0.lineno}:{indent} {name} : {error_line} : {0.code_line}"
-    error_line = re.sub('(\d+)(?=:)', r'\1\\', error_line)
+    error_line = re.sub("(\d+)(?=:)", r"\1\\", error_line)
     return template.format(
         tbline,
         name=override_name if override_name is not None else tbline.name,
@@ -364,10 +420,13 @@ def format_tbline(tbline, error_line, level=0, *, override_name=None):
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     FRAMEWORK_PATHS = {path: [] for path in DEFAULT_FRAMEWORK_PATHS}
     FRAMEWORK_PATHS.update(load_exclude_file())
-    FRAMEWORK_PATHS = {(p if p.startswith('/') else ('*/' + p)): (f or ['*']) for p, f in FRAMEWORK_PATHS.items()}
+    FRAMEWORK_PATHS = {
+        (p if p.startswith("/") else ("*/" + p)): (f or ["*"])
+        for p, f in FRAMEWORK_PATHS.items()
+    }
 
     if len(sys.argv) >= 2:
         filename = sys.argv[1]
