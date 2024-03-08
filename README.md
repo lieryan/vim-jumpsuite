@@ -134,7 +134,7 @@ You can also use locationlist:
 
 Install dependency:
 
-    pip install unittest-xml-runner
+    pip install unittest-xml-reporting
 
 Run xmlrunner, for example, from CLI:
 
@@ -163,7 +163,7 @@ Or make it permanent by adding in your pytest.ini
 
 Install dependency:
 
-     pip install unittest-xml-runner
+     pip install unittest-xml-reporting
 
 Add to your settings.py:
 
